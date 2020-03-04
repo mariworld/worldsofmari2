@@ -1,28 +1,29 @@
 let loggedInUser;
+const commentBox = document.querySelector('.FixedHeightContainer')
 
 //######################### Initial fetches ####################################
-const commentBox = document.querySelector('.FixedHeightContainer')
 const getVideos = () => fetch('http://localhost:3000/videos').then(resp => resp.json())
 const getUser = () => {return fetch('http://localhost:3000/users/').then( res => res.json())}
 getVideos().then(videos => videos.forEach(renderVideo))
 getUser().then( arrayOfUsers => {
     loggedInUser = arrayOfUsers[0]
-    console.log(loggedInUser);
+ 
     });
 
 //####################### My Containers ########################################
 const container = document.querySelector('#my-container') //big container
 const mariMusicCon = document.querySelector("#mari-music") // aside container- list of music
 const videoCon = document.querySelector('#video-container') // video container
-const commentContainer = document.querySelector("#comment-container") //commentContainer
+// const commentContainer = document.querySelector("#comment-container") //commentContainer
 
 
 
 //####################### creating a comment form ################################
-const form = document.createElement('form')
 
-function renderForm(){
+function renderForm(videoObj){
+    const form = document.createElement('form')
     form.id = "comment-form"
+    const formDiv = document.querySelector('#form-div')
     // form.dataset.id = 
     const messageLabel = document.createElement("label")
     messageLabel.setAttribute("for", "message")
@@ -33,7 +34,16 @@ function renderForm(){
     const submitForm = document.createElement("input")
     submitForm.type = "submit"
     form.append(messageLabel, messageInput, submitForm)
-    commentContainer.append(form)
+    // commentContainer.innerHTML = `
+    // <div class="FixedHeightContainer">
+    // </div>
+    // `
+    formDiv.innerHTML = ""
+    formDiv.append(form)
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        formEventListener(event,videoObj)
+        })
 }
 
 //#########################  BIG RENDER FUNCTION ##################################
@@ -41,7 +51,7 @@ function renderForm(){
 
 function renderVideo(videoObj){
     const videoDiv = document.createElement('div') //this is where the video lives
-    videoDiv.id = "#video-container" //this is the ID for it
+    videoDiv.id = "video-container" //this is the ID for it
     const titleLi = document.createElement('ul') //this creates the unordered list elements for each video on the aside container
     titleLi.innerHTML = `<h6>${videoObj.title}</h6>`
     mariMusicCon.append(titleLi) //aside container- appends each video's titleLi to the music container
@@ -50,13 +60,14 @@ function renderVideo(videoObj){
 //######################### beginning of event listener - click on sidebar, video shows #########################
     titleLi.addEventListener('click', (event) => { //this event listener opens a video when titleLi is clicked
         event.preventDefault()
-        (showVideo(event, videoObj))
-        
+        // commentBox.innerHTML = ""
+        showVideo(event, videoObj)
+        renderForm(videoObj)
+
         })
         
 //########################### showVideo - pops up the video container ################################################
     function showVideo(event, videoObj){
-        
         videoCon.innerHTML = `
         <div class="center">
         <h1 class="song-title">${videoObj.title}</h1>
@@ -65,13 +76,28 @@ function renderVideo(videoObj){
         </iframe>
         </div>
         `
-        commentContainer.innerHTML = 
-        `
-        <div class="FixedHeightContainer">
-        </div>
-        `
+//##################### this renders comments #####################################
+        console.log(videoObj)
+        videoObj.comments.forEach(comment => {
+            let comm = comment.message
+            let user = comment.username
+            const commLi = document.createElement('li')
+            const oldCommButton = document.createElement('button')
+            oldCommButton.innerText = "X"
+            console.log(oldCommButton)
+            commLi.innerText = `${user}: ${comm}`
+            commLi.append(oldCommButton)
+            commentBox.append(commLi)
+            oldCommButton.addEventListener('click', event => {                   
+                fetch(`http://localhost:3000/comments/${comment.id}`, {
+                    method: "DELETE"
+                })
+                commLi.remove()
+            })
+        })
         
     }
+
 //######################## end of showVideo function ##################################
 
 }
@@ -80,8 +106,7 @@ function renderVideo(videoObj){
 //global variable for current video -- whichever one is being clicked would render form 
 //###################### form event listener ##########################################
 
-form.addEventListener('submit', event => {
-    event.preventDefault();
+function formEventListener(event,videoObj){
     let newComment = event.target.message.value
     fetch("http://localhost:3000/comments", {
         method: "POST",
@@ -98,11 +123,10 @@ form.addEventListener('submit', event => {
         })
         .then(resp => resp.json())
         .then(comment => {
-            console.log(comment)
             const commentBox = document.querySelector('.FixedHeightContainer')
             const commentUl = document.createElement('ul')
             let newCommLi = document.createElement('li')
-            newCommLi.innerText = `${comment.user.name}: ${comment.message}`
+            newCommLi.innerText = `${comment.username}: ${comment.message}`
             commentUl.append(newCommLi)
             const commButton = document.createElement('button')
             commButton.innerText = "X"
@@ -113,12 +137,12 @@ form.addEventListener('submit', event => {
                     method: "DELETE"
                 })
                 newCommLi.remove()
-                
             })
         })
-    })
+    
+}
     //######################## end of form event listener ##################################
     
     
-    renderForm()
+    // renderForm()
     
