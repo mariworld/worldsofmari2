@@ -60,7 +60,7 @@ function renderVideo(videoObj){
 //######################### beginning of event listener - click on sidebar, video shows #########################
     titleLi.addEventListener('click', (event) => { //this event listener opens a video when titleLi is clicked
         event.preventDefault()
-        // commentBox.innerHTML = ""
+        commentBox.innerHTML = ""
         showVideo(event, videoObj)
         renderForm(videoObj)
 
@@ -81,18 +81,23 @@ function renderVideo(videoObj){
         videoObj.comments.forEach(comment => {
             let comm = comment.message
             let user = comment.username
-            const commLi = document.createElement('li')
+            let date = comment.date
+            const commUl = document.createElement('ul')
             const oldCommButton = document.createElement('button')
             oldCommButton.innerText = "X"
             console.log(oldCommButton)
-            commLi.innerText = `${user}: ${comm}`
-            commLi.append(oldCommButton)
-            commentBox.append(commLi)
+            commUl.innerText = `
+            ${user}: ${comm}
+            ${date}
+            `
+            commUl.style = "font-size:10px"
+            commUl.append(oldCommButton)
+            commentBox.append(commUl)
             oldCommButton.addEventListener('click', event => {                   
                 fetch(`http://localhost:3000/comments/${comment.id}`, {
                     method: "DELETE"
                 })
-                commLi.remove()
+                commUl.remove()
             })
         })
         
@@ -125,18 +130,18 @@ function formEventListener(event,videoObj){
         .then(comment => {
             const commentBox = document.querySelector('.FixedHeightContainer')
             const commentUl = document.createElement('ul')
-            let newCommLi = document.createElement('li')
-            newCommLi.innerText = `${comment.username}: ${comment.message}`
-            commentUl.append(newCommLi)
+            let newCommUl = document.createElement('Ul')
+            newCommUl.innerText = `${comment.username}: ${comment.message}`
+            commentUl.append(newCommUl)
             const commButton = document.createElement('button')
             commButton.innerText = "X"
-            newCommLi.append(commButton)
-            commentBox.append(newCommLi)
+            newCommUl.append(commButton)
+            commentBox.append(newCommUl)
             commButton.addEventListener('click', e => {                   
                 fetch(`http://localhost:3000/comments/${comment.id}`, {
                     method: "DELETE"
                 })
-                newCommLi.remove()
+                newCommUl.remove()
             })
         })
     
