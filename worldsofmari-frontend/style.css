@@ -1,0 +1,114 @@
+h1 {
+  color: black;
+}
+
+/* sidebar */
+/* aside {
+  grid-area: nav;
+}
+
+aside h1 {
+  margin: 1rem;
+  padding: 0.5rem;
+  text-transform: uppercase;
+  font-size: 2em;
+}
+
+aside h2 {
+  margin: 1rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #000;
+}
+
+aside .item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  transition: background-color .3s ease;
+  line-height: 1.5rem;
+}
+
+aside .item.button {
+  font-weight: bold;
+}
+
+aside ul {
+  width: 100%;
+  padding: 0;
+}
+
+aside li.item:hover {
+  background-color: #fae8b9;
+}
+
+aside li.item.winner:after {
+  content: "winner";
+  border-radius: 1em;
+  background-color: #facc57;
+  height: 1.5rem;
+  padding: 0 1em;
+  margin: 0 0.5rem;
+}
+
+main {
+  display: grid;
+  grid-template-areas:
+    "nav content";
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 1fr;
+  height: 100vh;
+} */
+
+.my-container{
+  display: flex;
+
+}
+.column {
+  flex: 0 0 150px;
+  float: left;
+  padding: 10px;
+  height: 300px; 
+
+}
+
+/* .center-column {
+  flex-grow: 1;
+  float: right;
+  padding: 10px;
+  height: 300px; 
+
+} */
+
+.right-column {
+  flex: 0 0 250px;
+}
+
+.FixedHeightContainer
+    {
+      float: right;
+      background-color:#FCFADD;
+      color:#714D03;
+      height: 150px;
+      width:150px; 
+      border:4px double #DEBB07;
+      padding:3px; 
+      line-height:3em;
+      overflow:scroll;
+      padding-top: 20px;
+      padding-bottom: 20px;
+        background: gold;
+        position: absolute; top: 200px; right: 80px;
+    }
+
+    .center {
+      margin: auto;
+      width: 50%;
+      border: 3px solid green;
+      padding: 10px;
+    }
+
+    #comment-form {
+      padding-bottom: 4px;
+    }
