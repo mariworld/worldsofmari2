@@ -108,9 +108,8 @@ function renderVideo(videoObj){
 }
 
 
-//global variable for current video -- whichever one is being clicked would render form 
-//###################### form event listener ##########################################
 
+//###################### form event listener ##########################################
 function formEventListener(event,videoObj){
     let newComment = event.target.message.value
     fetch("http://localhost:3000/comments", {
@@ -137,6 +136,8 @@ function formEventListener(event,videoObj){
             commButton.innerText = "X"
             newCommUl.append(commButton)
             commentBox.append(newCommUl)
+
+//######################### Delete Event listener ###############################
             commButton.addEventListener('click', e => {                   
                 fetch(`http://localhost:3000/comments/${comment.id}`, {
                     method: "DELETE"
@@ -146,8 +147,6 @@ function formEventListener(event,videoObj){
         })
     
 }
-    //######################## end of form event listener ##################################
+//####################### end of form event listener #############################
     
-    
-    // renderForm()
     
